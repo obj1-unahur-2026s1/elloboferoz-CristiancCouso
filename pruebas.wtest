@@ -1,0 +1,53 @@
+import personajes.*
+import alimentos.*
+import armas.*
+
+describe "Pruebas de la historia de El Lobo Feroz" {
+
+  test "El lobo atraviesa la historia: corre, come y sufre una crisis" {
+    // 1. Estado inicial: peso 10, no está saludable
+    assert.equals(10, feroz.peso())
+    assert.notThat(feroz.estaSaludable())
+
+    // 2. El lobo va corriendo hasta el bosque (-1 unidad de peso)
+    feroz.correHaciaUnLugar()
+    assert.equals(9, feroz.peso())
+
+    // 3. El lobo corre a la casa de la abuelita (-1 unidad de peso)
+    feroz.correHaciaUnLugar()
+    assert.equals(8, feroz.peso())
+
+    // 4. Se come a la abuelita (pesa 50, lobo aumenta 10% -> 5)
+    feroz.comioUnAlimento(abuela)
+    assert.equals(13, feroz.peso())
+
+    // 5. Caperucita pierde una manzana en el bosque (6 -> 5 manzanas)
+    canasta.cambiarCantidadDeManzanas(5)
+    
+    // 6. El lobo se come a Caperucita (pesa 60, lobo aumenta 10% -> 6)
+    feroz.comioUnAlimento(caperucita)
+    assert.equals(19, feroz.peso())
+
+    // 7. El lobo se come la canasta con las 5 manzanas (5 * 0.2 = 1.0, lobo aumenta 10% -> 0.1)
+    feroz.comioUnAlimento(canasta)
+    assert.equals(19.1, feroz.peso())
+    
+    // El lobo aún no está saludable (rango saludable: 20 a 150)
+    assert.notThat(feroz.estaSaludable())
+
+    // 8. Llega el cazador. El lobo se lo come.
+    // El cazador pesa 70 + escopeta(50) = 120. Lobo aumenta 10% -> 12.
+    feroz.comioUnAlimento(cazador)
+    assert.equals(31.1, feroz.peso())
+    
+    // Ahora el lobo sí está saludable
+    assert.that(feroz.estaSaludable())
+
+    // 9. Finalmente, el cazador (desde adentro o por su presencia) provoca una crisis
+    // El lobo vuelve a su peso inicial de 10
+    feroz.sufrioUnaCrisis()
+    assert.equals(10, feroz.peso())
+    assert.notThat(feroz.estaSaludable())
+  }
+
+}
